@@ -5,6 +5,12 @@
   <%= @event.name %>
 </p>
 
+<ul>
+<% @event.groups.each do |g| %>
+	<li><%= g.name %></li>
+<% end %>
+</ul>
+
 <p>
   <strong>Descrption:</strong>
   <%= @event.descrption %>

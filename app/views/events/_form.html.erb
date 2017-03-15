@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <%= f.collection_check_boxes(:group_ids, Group.all, :id, :name) %> 
+
   <div class="field">
     <%= f.label :name %>
     <%= f.text_field :name %>

@@ -69,6 +69,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:name, :descrption, :is_public, :capacity)
+      params.require(:event).permit(:name, :descrption, :is_public, :capacity,
+                                    :group_ids => []) # 允許它是一個陣列顯示
     end
 end
