@@ -5,6 +5,8 @@
   <%= @event.name %>
 </p>
 
+<p><%= @event.status %></p>
+
 <ul>
 <% @event.groups.each do |g| %>
 	<li><%= g.name %></li>

@@ -1,10 +1,14 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_event, except: [:index, :new, :create, :latest, :bulk_update]
 
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    if params[:keyword]
+      @events = Event.where("name LIKE ?", "%#{params[:keyword]}%")
+    else
+      @events = Event.all
+    end
   end
 
   # GET /events/1
@@ -61,6 +65,30 @@ class EventsController < ApplicationController
     end
   end
 
+  # GET /events/latest
+  def latest
+    @events = Event.order("id DESC").limit(3)
+  end
+
+  # POST /events/bulk_update
+  def bulk_update
+    ids = Array(params[:ids])
+    events = ids.map{ |i| Event.find_by_id(i) }.compact
+
+    if params[:commit] == "Publish"
+      events.each{ |e| e.update( :status => "published" ) }
+    elsif params[:commit] == "Delete"
+      events.each{ |e| e.destroy }
+    end
+
+    redirect_to events_url
+  end
+
+  # GET /events /:id /dashboard
+  def dashboard
+    @event = Event.find(params[:id])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
@@ -69,7 +97,13 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:name, :descrption, :is_public, :capacity,
-                                    :group_ids => []) # 允許它是一個陣列顯示
+      params.require(:event).permit(
+        :name, 
+        :descrption, 
+        :is_public, 
+        :capacity, 
+        :status,
+        :group_ids => []) # 允許它是一個陣列顯示
     end
+
 end
