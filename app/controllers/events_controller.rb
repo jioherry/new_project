@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, except: [:index, :new, :create, :latest, :bulk_update]
+  before_action :set_event, except: [:index, :new, :create, :latest, :bulk_update, :authenticate_user!]
 
   # GET /events
   # GET /events.json
